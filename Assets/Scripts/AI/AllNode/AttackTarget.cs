@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class AttackTarget : Node
 {
-    protected EnemyController enemyController;
-    protected CoolDown coolDown;
+    [SerializeField] protected EnemyController enemyController;
+    [SerializeField] protected CoolDown coolDown;
 
-    public AttackTarget(EnemyController enemyController, CoolDown coolDown)
-    {
-        this.enemyController = enemyController;
-        this.coolDown = coolDown;
-    }
+    
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         AttackingTarget();
+        EndNode();
         return nodeState;
     }
+
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
+    {
+        base.Init(enemyAI, parent);
+        enemyController = enemyAI.EnemyController;
+        coolDown = parent.GetNode<CoolDown>();
+    }
+
     protected virtual void AttackingTarget()
     {
         if (!enemyController.Animator.GetCurrentAnimatorStateInfo(0).IsName("Attack_3"))

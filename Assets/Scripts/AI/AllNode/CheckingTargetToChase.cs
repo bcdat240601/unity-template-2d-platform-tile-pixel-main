@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class CheckingTargetToChase : Node
 {
-    protected EnemyAI enemyAI;
+    [SerializeField] protected EnemyAI enemyAI;
 
-    public CheckingTargetToChase(EnemyAI enemyAI)
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
     {
+        base.Init(enemyAI, parent);
         this.enemyAI = enemyAI;
     }
-
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         CheckTarget();
+        EndNode();
         return nodeState;
     }
 
@@ -28,7 +30,7 @@ public class CheckingTargetToChase : Node
         Collider2D[] targetColliders = Physics2D.OverlapCircleAll(enemyAI.transform.parent.position, enemyAI.CheckingChaseRange, enemyAI.TargetMask);
         if (targetColliders.Length == 0)
         {
-            nodeState = NodeState.FAILURE;
+            nodeState = NodeState.FAILURE;           
         }
         else
         {

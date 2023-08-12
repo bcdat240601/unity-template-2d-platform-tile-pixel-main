@@ -5,18 +5,22 @@ using UnityEngine.AI;
 
 public class Patrol : Node
 {
-    protected EnemyController enemyController;
-    protected EnemyAI enemyAI;
-    protected int currentDirection;
-    public Patrol(EnemyController enemyController, EnemyAI enemyAI)
-    {        
-        this.enemyController = enemyController;
+    [SerializeField] protected EnemyController enemyController;
+    [SerializeField] protected EnemyAI enemyAI;
+    [SerializeField] protected int currentDirection;
+
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
+    {
+        base.Init(enemyAI, parent);
         this.enemyAI = enemyAI;
+        enemyController = enemyAI.EnemyController;
     }
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         Patrolling();
+        EndNode();
         return nodeState;
     }
 
@@ -31,6 +35,6 @@ public class Patrol : Node
         if (enemyAI.EnemyDirection == EnemyDirection.Left)
             enemyController.EnemyRigidBody.MovePosition(enemyController.transform.position + Vector3.left * Time.deltaTime * 2);
         else
-            enemyController.EnemyRigidBody.MovePosition(enemyController.transform.position + Vector3.right * Time.deltaTime * 2);        
+            enemyController.EnemyRigidBody.MovePosition(enemyController.transform.position + Vector3.right * Time.deltaTime * 2);
     }
 }

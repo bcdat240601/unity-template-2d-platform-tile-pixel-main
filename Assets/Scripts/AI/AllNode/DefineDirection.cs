@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class DefineDirection : Node
 {
-    protected int distanceToMove;
-    protected EnemyAI enemyAI;
-    protected Collider2D collider2D;
+    [SerializeField] protected int distanceToMove;
+    [SerializeField] protected EnemyAI enemyAI;
+    [SerializeField] protected Collider2D collider2D;
 
-    public DefineDirection(EnemyAI enemyAI)
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
     {
+        base.Init(enemyAI, parent);
         this.enemyAI = enemyAI;
     }
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         FindNewPosition();
+        EndNode();
         return nodeState;
     }
 
@@ -33,7 +36,7 @@ public class DefineDirection : Node
             ChangeDirection();
         }
         enemyAI.DistanceToMove -= Time.deltaTime;
-        nodeState = NodeState.SUCCESS;       
+        nodeState = NodeState.SUCCESS;
     }    
     protected virtual void ChangeDirection()
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,33 @@ public abstract class BaseAI : SetupBehaviour
 {
     [SerializeField] protected EnemyController enemyController;
     public EnemyController EnemyController => enemyController;
+    [SerializeField] protected Node root;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         GetEnemyController();
+        GetRoot();
     }
 
-    protected virtual void OnEnable()
+    protected virtual void GetRoot()
     {
-        Node root = InitializeNode();
+        if (root != null) return;
+        root = transform.Find("Root").GetComponent<Node>();
+        Debug.Log("Reset " + nameof(root) + " in " + GetType().Name);
+
+    }
+    protected override void Awake()
+    {
+        base.Awake();
+        InitializeNode();
+    }
+    protected virtual void OnEnable()
+    {        
         StartCoroutine(StartAI(root));
     }
-    protected virtual Node InitializeNode()
+    protected virtual void InitializeNode()
     {
-        return null;
-        //for overide
+        // for override
     }
     protected virtual IEnumerator StartAI(Node root)
     {

@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 public class CoolDown : Node
 {
+    [SerializeField] protected float timeToCooldown;
     public Timer timer;
-    public CoolDown(float timeToCooldown)
+
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
     {
+        base.Init(enemyAI, parent);
         timer = new Timer();
         timer.SetCooldownTime(timeToCooldown);
     }
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         CheckCooldown();
+        EndNode();
         return nodeState;
     }
 

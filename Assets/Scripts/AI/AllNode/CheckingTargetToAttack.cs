@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class CheckingTargetToAttack : Node
 {
-    protected EnemyDetectTarget enemyDetectTarget;
-    protected EnemyAI enemyAI;
-    protected Collider2D[] targetColliders;
-    public CheckingTargetToAttack(EnemyDetectTarget enemyDetectTarget, EnemyAI enemyAI)
+    [SerializeField] protected EnemyDetectTarget enemyDetectTarget;
+    [SerializeField] protected EnemyAI enemyAI;
+    [SerializeField] protected Collider2D[] targetColliders;
+
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
     {
-        this.enemyDetectTarget = enemyDetectTarget;
+        base.Init(enemyAI, parent);
         this.enemyAI = enemyAI;
+        enemyDetectTarget = enemyAI.EnemyController.EnemyDetectTarget;
     }
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         CheckTarget();
+        EndNode();
         return nodeState;
     }
 

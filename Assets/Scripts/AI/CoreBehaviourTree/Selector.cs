@@ -1,15 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Selector : Node
+public class Selector : ActionNode
 {
-    protected List<Node> nodes = new List<Node>();
-
-    public Selector(List<Node> nodes)
-    {
-        this.nodes = nodes;
-    }
 
     public override NodeState Evaluate()
     {

@@ -32,6 +32,7 @@ public class EnemyAI : BaseAI
     public Transform Target;
     public EnemyActiveState enemyActiveState;
 
+    #region SetupComponent
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -46,22 +47,7 @@ public class EnemyAI : BaseAI
         checkWall = transform.Find("CheckWall").transform;
         Debug.Log("Reset " + nameof(checkWall) + " in " + GetType().Name);
     }
-
-    protected override Node InitializeNode()
-    {
-        Patrol patrol = new Patrol(enemyController,this);
-        DefineDirection defineDirection = new DefineDirection(this);
-        CheckingTargetToChase checkingTargetToChase = new CheckingTargetToChase(this);
-        ChaseTarget chaseTarget = new ChaseTarget(this,enemyController);
-        CheckingTargetToAttack checkingTargetToAttack = new CheckingTargetToAttack(enemyController.EnemyDetectTarget, this);
-        CoolDown coolDown = new CoolDown(1f);
-        AttackTarget attackTarget = new AttackTarget(enemyController, coolDown);
-        Sequence mainAttack = new Sequence(new List<Node> { checkingTargetToAttack, coolDown, attackTarget });
-        Sequence mainChase = new Sequence(new List<Node> { checkingTargetToChase, chaseTarget });
-        Sequence mainPatrol = new Sequence(new List<Node> { defineDirection, patrol });
-        Node root = new Selector(new List<Node> {mainAttack ,mainChase, mainPatrol });        
-        return root;
-    }
+    
 
 
     protected virtual void SetDefaultTargetToChase()
@@ -76,8 +62,13 @@ public class EnemyAI : BaseAI
         CheckWallMask = LayerMask.GetMask("Ground");
         Debug.Log("Reset " + this.GetType().Name + " in " + transform.parent.name + " : " + nameof(CheckWallMask));
     }
+    #endregion
 
 
+    protected override void InitializeNode()
+    {
+        root.Init(this, null);
+    }
     public virtual void EnemyFacing()
     {
         if (EnemyDirection == EnemyDirection.Left)

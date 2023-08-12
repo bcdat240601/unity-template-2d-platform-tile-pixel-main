@@ -5,17 +5,21 @@ using UnityEngine.AI;
 
 public class ChaseTarget : Node
 {
-    protected EnemyAI enemyAI;
-    protected EnemyController enemyController;
-    public ChaseTarget(EnemyAI enemyAI, EnemyController enemyController)
+    [SerializeField] protected EnemyAI enemyAI;
+    [SerializeField] protected EnemyController enemyController;
+
+    public override void Init(EnemyAI enemyAI, ActionNode parent)
     {
+        base.Init(enemyAI, parent);
         this.enemyAI = enemyAI;
-        this.enemyController = enemyController;
+        enemyController = enemyAI.EnemyController;
     }
     public override NodeState Evaluate()
     {
         nodeState = NodeState.RUNNING;
+        StartNode();
         ChasingTarget();
+        EndNode();
         return nodeState;
     }
     protected virtual void ChasingTarget()

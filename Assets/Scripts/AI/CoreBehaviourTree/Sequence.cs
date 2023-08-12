@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
-public class Sequence : Node
-{
-    protected List<Node> nodes = new List<Node>();
-
-    public Sequence(List<Node> nodes)
-    {
-        this.nodes = nodes;
-    }
-
+public class Sequence : ActionNode
+{   
+    
     public override NodeState Evaluate()
     {
         bool isRunning = false;
